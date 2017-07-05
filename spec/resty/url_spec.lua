@@ -45,6 +45,14 @@ describe('resty.url', function()
     it('works with redis DSN', function()
       assert.same({'redis', 'user', 'pass', 'localhost', '6379', '/42' }, split('redis://user:pass@localhost:6379/42', 'redis'))
     end)
+
+    it('works with IPv4 host', function()
+      assert.same({'https', false, false, '195.47.235.3', '443', '/path'}, split('https://195.47.235.3:443/path'))
+    end)
+
+    it('works with IPv6 host', function()
+      assert.same({'https', false, false, '[2a02:38::1001]', '443', '/path'}, split('https://[2a02:38::1001]:443/path'))
+    end)
   end)
 
   describe('.parse', function()
@@ -72,6 +80,14 @@ describe('resty.url', function()
 
     it('works with redis DSN', function()
       assert.same({ scheme = 'redis', user = 'user', password = 'pass', host = 'localhost', port = 6379, path = '/42' }, parse('redis://user:pass@localhost:6379/42', 'redis'))
+    end)
+
+    it('works with IPv4 host', function()
+      assert.same({ scheme = 'https', host = '195.47.235.3', port = 443, path = '/path'}, parse('https://195.47.235.3:443/path'))
+    end)
+
+    it('works with IPv6 host', function()
+      assert.same({ scheme = 'https', host = '[2a02:38::1001]', port = 443, path = '/path'}, parse('https://[2a02:38::1001]:443/path'))
     end)
 
     it('serializes back', function()
