@@ -1,4 +1,4 @@
-Name
+lua-resty-url [![CircleCI](https://circleci.com/gh/3scale/lua-resty-url.svg?style=svg)](https://circleci.com/gh/3scale/lua-resty-url)
 ====
 
 lua-resty-url - URL parser for OpenResty.
