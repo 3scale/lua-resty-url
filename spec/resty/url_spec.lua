@@ -23,35 +23,43 @@ describe('resty.url', function()
     local split = url.split
 
     it('works with port', function()
-      assert.same({'https', false, false, 'example.com', '8443'}, split('https://example.com:8443'))
+      assert.same({'https', false, false, 'example.com', '8443'},
+        split('https://example.com:8443'))
     end)
 
     it('works with user', function()
-      assert.same({'https', 'user', false, 'example.com', false }, split('https://user@example.com'))
+      assert.same({'https', 'user', false, 'example.com', false },
+        split('https://user@example.com'))
     end)
 
     it('works with user and password', function()
-      assert.same({'https', 'user', 'password', 'example.com', false }, split('https://user:password@example.com'))
+      assert.same({'https', 'user', 'password', 'example.com', false },
+        split('https://user:password@example.com'))
     end)
 
     it('works with port and path', function()
-      assert.same({'http', false, false, 'example.com', '8080', '/path'}, split('http://example.com:8080/path'))
+      assert.same({'http', false, false, 'example.com', '8080', '/path'},
+        split('http://example.com:8080/path'))
     end)
 
     it('removes the trailing slash', function()
-      assert.same({'http', false, false, 'api.twitter.com', false }, split('http://api.twitter.com/'))
+      assert.same({'http', false, false, 'api.twitter.com', false },
+        split('http://api.twitter.com/'))
     end)
 
     it('works with redis DSN', function()
-      assert.same({'redis', 'user', 'pass', 'localhost', '6379', '/42' }, split('redis://user:pass@localhost:6379/42', 'redis'))
+      assert.same({'redis', 'user', 'pass', 'localhost', '6379', '/42' },
+        split('redis://user:pass@localhost:6379/42', 'redis'))
     end)
 
     it('works with IPv4 host', function()
-      assert.same({'https', false, false, '195.47.235.3', '443', '/path'}, split('https://195.47.235.3:443/path'))
+      assert.same({'https', false, false, '195.47.235.3', '443', '/path'},
+        split('https://195.47.235.3:443/path'))
     end)
 
     it('works with IPv6 host', function()
-      assert.same({'https', false, false, '[2a02:38::1001]', '443', '/path'}, split('https://[2a02:38::1001]:443/path'))
+      assert.same({'https', false, false, '[2a02:38::1001]', '443', '/path'},
+        split('https://[2a02:38::1001]:443/path'))
     end)
   end)
 
@@ -59,35 +67,43 @@ describe('resty.url', function()
     local parse = url.parse
 
     it('works with port', function()
-      assert.same({ scheme = 'https', host ='example.com', port = 8443 }, parse('https://example.com:8443'))
+      assert.same({ scheme = 'https', host ='example.com', port = 8443 },
+        parse('https://example.com:8443'))
     end)
 
     it('works with user', function()
-      assert.same({ scheme = 'https', user = 'user', host = 'example.com' }, parse('https://user@example.com'))
+      assert.same({ scheme = 'https', user = 'user', host = 'example.com' },
+        parse('https://user@example.com'))
     end)
 
     it('works with user and password', function()
-      assert.same({ scheme = 'https', user = 'user', password = 'password', host = 'example.com' }, parse('https://user:password@example.com'))
+      assert.same({ scheme = 'https', user = 'user', password = 'password', host = 'example.com' },
+        parse('https://user:password@example.com'))
     end)
 
     it('works with port and path', function()
-      assert.same({ scheme = 'http', host = 'example.com', port = 8080, path = '/path'}, parse('http://example.com:8080/path'))
+      assert.same({ scheme = 'http', host = 'example.com', port = 8080, path = '/path'},
+        parse('http://example.com:8080/path'))
     end)
 
     it('removes the trailing slash', function()
-      assert.same({ scheme = 'http', host = 'api.twitter.com' }, parse('http://api.twitter.com/'))
+      assert.same({ scheme = 'http', host = 'api.twitter.com' },
+        parse('http://api.twitter.com/'))
     end)
 
     it('works with redis DSN', function()
-      assert.same({ scheme = 'redis', user = 'user', password = 'pass', host = 'localhost', port = 6379, path = '/42' }, parse('redis://user:pass@localhost:6379/42', 'redis'))
+      assert.same({ scheme = 'redis', user = 'user', password = 'pass', host = 'localhost', port = 6379, path = '/42' },
+        parse('redis://user:pass@localhost:6379/42', 'redis'))
     end)
 
     it('works with IPv4 host', function()
-      assert.same({ scheme = 'https', host = '195.47.235.3', port = 443, path = '/path'}, parse('https://195.47.235.3:443/path'))
+      assert.same({ scheme = 'https', host = '195.47.235.3', port = 443, path = '/path'},
+        parse('https://195.47.235.3:443/path'))
     end)
 
     it('works with IPv6 host', function()
-      assert.same({ scheme = 'https', host = '[2a02:38::1001]', port = 443, path = '/path'}, parse('https://[2a02:38::1001]:443/path'))
+      assert.same({ scheme = 'https', host = '[2a02:38::1001]', port = 443, path = '/path'},
+        parse('https://[2a02:38::1001]:443/path'))
     end)
 
     it('serializes back', function()
