@@ -120,4 +120,15 @@ describe('resty.url', function()
     end)
   end)
 
+  describe('.normalize', function()
+    local normalize = url.normalize
+
+    it('normalizes slases in path', function()
+      assert.same('https://example.com/foo/bar/baz', normalize('https://example.com/foo///bar//baz'))
+    end)
+
+    it('not normalizes file scheme', function()
+      assert.same('file:///var/test/folder', normalize('file:///var/test//folder'))
+    end)
+  end)
 end)

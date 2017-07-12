@@ -3,6 +3,7 @@ local re_match = ngx.re.match
 local concat = table.concat
 local tonumber = tonumber
 local setmetatable = setmetatable
+local re_gsub = ngx.re.gsub
 
 local _M = {
   _VERSION = '0.1.0',
@@ -61,6 +62,30 @@ function _M.parse(url, protocol)
     port = tonumber(parts[5]),
     path = parts[6] or nil
   }, { __tostring = function() return url end })
+end
+
+function _M.normalize(uri)
+  local regex = [[
+(                     # Capture group
+
+  (?<!/)/             # Look for / that does not follow another /
+
+  # Look for file:///
+  (?(?<=\bfile:/)      # if...
+    //                    # then look for // right after it
+    |                     # else
+
+    # Look for http:// or ftp://, etc.
+    (?(?<=:/)            # if [stuff]:/
+    /                  # then look for /
+    |                   # else
+
+    )
+  )
+)
+/+                   # everything else with / after it
+]]
+  return re_gsub(uri, regex, '/', 'jox')
 end
 
 function _M.join(...)

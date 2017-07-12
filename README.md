@@ -97,6 +97,14 @@ Returns default port for given scheme. Only http and https provided by default.
 
 [Back to TOC](#table-of-contents)
 
+normalize
+------------
+`syntax: uri = resty_url.normalize(uri)`
+
+Removes unnecessary slashes from the URI.
+
+[Back to TOC](#table-of-contents)
+
 Installation
 ============
 
