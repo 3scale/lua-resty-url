@@ -7,7 +7,7 @@ local re_gsub = ngx.re.gsub
 local select = select
 
 local _M = {
-  _VERSION = '0.1.0',
+  _VERSION = '0.2.0',
 
   ports = {
     https = 443,
