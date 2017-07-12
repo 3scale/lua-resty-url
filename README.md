@@ -85,7 +85,8 @@ join
 ----------
 `syntax: url = resty_url.join(base, part, ...)`
 
-Concatenates URI components into resulting URL. No logic applied, just concatenating them with empty string.
+Concatenates URI components into resulting URL. Also normalizes URI to remove double slashes.
+Can concatenate objects returned by `parse` method.
 
 [Back to TOC](#table-of-contents)
 
@@ -94,6 +95,14 @@ default\_port
 `syntax: port = resty_url.default_port(scheme)`
 
 Returns default port for given scheme. Only http and https provided by default.
+
+[Back to TOC](#table-of-contents)
+
+normalize
+------------
+`syntax: uri = resty_url.normalize(uri)`
+
+Removes unnecessary slashes from the URI.
 
 [Back to TOC](#table-of-contents)
 

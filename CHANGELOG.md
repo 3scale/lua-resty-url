@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+### Added
+* `resty_url.normalize(url)` to normalize multiple slashes
+* `resty_url.join(...)` to join parsed urls and perform normalization
+
 ## [0.1.0] - 2017-07-04
 
 Initial release.

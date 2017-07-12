@@ -118,6 +118,27 @@ describe('resty.url', function()
     it('works with a slash', function()
       assert.same('https://example.com/foo', join('https://example.com', '/foo'))
     end)
+
+    it('works without a slash', function()
+      assert.same('https://example.com/foo', join('https://example.com', 'foo'))
+    end)
+
+    it('works on parsed url', function()
+      local uri = url.parse('http://example.com/foo')
+
+      assert.same('http://example.com/foo/bar', join(uri, '/bar'))
+    end)
   end)
 
+  describe('.normalize', function()
+    local normalize = url.normalize
+
+    it('normalizes slases in path', function()
+      assert.same('https://example.com/foo/bar/baz', normalize('https://example.com/foo///bar//baz'))
+    end)
+
+    it('not normalizes file scheme', function()
+      assert.same('file:///var/test/folder', normalize('file:///var/test//folder'))
+    end)
+  end)
 end)
