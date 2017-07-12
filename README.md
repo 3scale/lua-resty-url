@@ -85,7 +85,8 @@ join
 ----------
 `syntax: url = resty_url.join(base, part, ...)`
 
-Concatenates URI components into resulting URL. No logic applied, just concatenating them with empty string.
+Concatenates URI components into resulting URL. Also normalizes URI to remove double slashes.
+Can concatenate objects returned by `parse` method.
 
 [Back to TOC](#table-of-contents)
 

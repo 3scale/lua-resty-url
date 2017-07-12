@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 * `resty_url.normalize(url)` to normalize multiple slashes
+* `resty_url.join(...)` to join parsed urls and perform normalization
 
 ## [0.1.0] - 2017-07-04
 

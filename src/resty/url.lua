@@ -4,6 +4,7 @@ local concat = table.concat
 local tonumber = tonumber
 local setmetatable = setmetatable
 local re_gsub = ngx.re.gsub
+local select = select
 
 local _M = {
   _VERSION = '0.1.0',
@@ -89,7 +90,13 @@ function _M.normalize(uri)
 end
 
 function _M.join(...)
-  return concat({ ... }, '')
+  local components = {}
+
+  for i=1, select('#', ...) do
+    components[i] = tostring(select(i, ...))
+  end
+
+  return _M.normalize(concat(components, '/'))
 end
 
 

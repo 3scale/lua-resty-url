@@ -118,6 +118,16 @@ describe('resty.url', function()
     it('works with a slash', function()
       assert.same('https://example.com/foo', join('https://example.com', '/foo'))
     end)
+
+    it('works without a slash', function()
+      assert.same('https://example.com/foo', join('https://example.com', 'foo'))
+    end)
+
+    it('works on parsed url', function()
+      local uri = url.parse('http://example.com/foo')
+
+      assert.same('http://example.com/foo/bar', join(uri, '/bar'))
+    end)
   end)
 
   describe('.normalize', function()
