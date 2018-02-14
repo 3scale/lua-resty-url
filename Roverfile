@@ -1,0 +1,7 @@
+luarocks {
+    group 'test' {
+        module { 'busted' },
+    },
+}
+
+

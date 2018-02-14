@@ -2,11 +2,23 @@ version: 2
 jobs:
   build:
     docker:
-      - image: quay.io/3scale/s2i-openresty-centos7:luarocks-build
+      - image: quay.io/3scale/s2i-openresty-centos7:master
     working_directory: /opt/app-root/lua-resty-url
     steps:
       - checkout
-      - run: luarocks make rockspecs/*.rockspec
-      - run: luarocks build rockspecs/*.rockspec
-      - run: luarocks install busted
-      - run: bin/busted
+      - restore_cache:
+          keys:
+            - resty-url-rover-{{ arch }}-{{ checksum "Roverfile.lock" }}
+            - resty-url-rover-{{ arch }}-{{ .Branch }}
+            - resty-url-rover-{{ arch }}-master
+      - run: mkdir -p tmp/junit; rover install
+      - save_cache:
+          key: resty-url-rover-{{ arch }}-{{ checksum "Roverfile.lock" }}
+          paths:
+            - lua_modules
+      - run: busted
+      - store_artifacts:
+          path: tmp
+          destination: tmp
+      - store_test_results:
+          path: tmp/junit
