@@ -110,6 +110,12 @@ describe('resty.url', function()
       local uri = 'https://user:password@example.com:1234/path?query'
       assert.equal(uri, tostring(parse(uri)))
     end)
+
+    it('works with data-uri', function()
+      local opaque = [[application/json;charset=utf-8;base64,eyJzZXJ2aWNlcyI6W3siaWQiOjEyMzQsImJhY2tlbmRfdmVyc2lvbiI6MSwicHJveHkiOnsiYXBpX2JhY2tlbmQiOiJodHRwOi8vMTI3LjAuMC4xOjgwODEiLCJob3N0bmFtZV9yZXdyaXRlIjoiZWNobyIsImhvc3RzIjpbImxvY2FsaG9zdCIsIjEyNy4wLjAuMSJdLCJiYWNrZW5kIjp7ImVuZHBvaW50IjoiaHR0cDovLzEyNy4wLjAuMTo4MDgxIiwiaG9zdCI6ImVjaG8ifSwicG9saWN5X2NoYWluIjpbeyJuYW1lIjoiYXBpY2FzdC5wb2xpY3kuYXBpY2FzdCJ9XSwicHJveHlfcnVsZXMiOlt7Imh0dHBfbWV0aG9kIjoiR0VUIiwicGF0dGVybiI6Ii8iLCJtZXRyaWNfc3lzdGVtX25hbWUiOiJoaXRzIiwiZGVsdGEiOjF9LHsiaHR0cF9tZXRob2QiOiJQT1NUIiwicGF0dGVybiI6Ii8iLCJtZXRyaWNfc3lzdGVtX25hbWUiOiJoaXRzIiwiZGVsdGEiOjF9LHsiaHR0cF9tZXRob2QiOiJQVVQiLCJwYXR0ZXJuIjoiLyIsIm1ldHJpY19zeXN0ZW1fbmFtZSI6ImhpdHMiLCJkZWx0YSI6MX1dfX1dfQ==]]
+      local uri = 'data:' .. opaque
+      assert.same({ scheme = 'data', opaque = opaque }, parse(uri))
+    end)
   end)
 
   describe('.join', function()

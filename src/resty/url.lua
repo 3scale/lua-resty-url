@@ -5,6 +5,8 @@ local tonumber = tonumber
 local setmetatable = setmetatable
 local re_gsub = ngx.re.gsub
 local select = select
+local find = string.find
+local sub = string.sub
 
 local _M = {
   _VERSION = '0.2.0',
@@ -19,22 +21,41 @@ function _M.default_port(scheme)
   return _M.ports[scheme]
 end
 
+function _M.scheme(url)
+    local start = find(url, ':', 1, true)
+
+    if start then
+      return sub(url, 1, start - 1), sub(url, start + 1)
+    end
+end
+
+local abs_pattern = [[\/\/(?:(?<userinfo>.+)@)?(?<host>[^\/\s]+?)(?::(?<port>\d+))?(?<path>\/.*)?$]]
+local http_pattern = '^https?$'
+
 function _M.split(url, protocol)
   if not url then
     return nil, 'missing endpoint'
   end
 
-  if not protocol then
-    protocol = 'https?'
+  local scheme, opaque = _M.scheme(url)
+
+  if not scheme then return nil, 'missing scheme' end
+
+  if protocol and not re_match(scheme, protocol, 'oj') then
+    return nil, 'invalid protocol'
   end
 
-  local m = re_match(url, "^(" .. protocol .. "):\\/\\/(?:(.+)@)?([^\\/\\s]+?)(?::(\\d+))?(\\/.*)?$", 'oj')
+  local m = re_match(url, abs_pattern, 'oj')
 
   if not m then
-    return nil, 'invalid endpoint' -- TODO: maybe improve the error message?
+    if re_match(scheme, http_pattern, 'oj') then
+      return nil, 'invalid endpoint'
+    end
+
+    return { scheme, opaque = opaque }
   end
 
-  local scheme, userinfo, host, port, path = m[1], m[2], m[3], m[4], m[5]
+  local userinfo, host, port, path = m.userinfo, m.host, m.port, m.path
   local user, pass
 
   if path == '/' then path = nil end
@@ -61,7 +82,8 @@ function _M.parse(url, protocol)
     password = parts[3] or nil,
     host = parts[4] or nil,
     port = tonumber(parts[5]),
-    path = parts[6] or nil
+    path = parts[6] or nil,
+    opaque = parts.opaque,
   }, { __tostring = function() return url end })
 end
 
