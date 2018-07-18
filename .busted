@@ -1,0 +1,10 @@
+local ci = os.getenv('CI')
+
+if ci then
+  return {
+    default = {
+      output = 'junit',
+      Xoutput = 'tmp/junit/busted.xml',
+    }
+  }
+end
