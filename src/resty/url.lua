@@ -7,6 +7,7 @@ local re_gsub = ngx.re.gsub
 local select = select
 local find = string.find
 local sub = string.sub
+local assert = assert
 
 local _M = {
   _VERSION = '0.2.0',
@@ -29,8 +30,71 @@ function _M.scheme(url)
     end
 end
 
-local abs_pattern = [[\/\/(?:(?<userinfo>.+)@)?(?<host>[^\/\s]+?)(?::(?<port>\d+))?(?<path>\/.*)?$]]
-local http_pattern = '^https?$'
+
+local core_base = require "resty.core.base"
+local core_regex = require "resty.core.regex"
+local new_tab = core_base.new_tab
+local C = require('ffi').C
+
+local function compile_regex(pattern)
+  local compiled, err, flags = core_regex.re_match_compile(pattern, 'jox')
+
+  assert(compiled, err)
+
+  return compiled, flags
+end
+
+local collect_captures = core_regex.collect_captures
+local abs_regex, abs_regex_flags = compile_regex([[
+  ^
+    (?:(\w+):)? # scheme (1)
+    //
+    (?:
+      ([^:@]+) # user (2)
+      (?:
+        :
+        ([^@]+)? # password (3)
+      )?
+    @)?
+    ( # host (4)
+      [a-z\.-]+ # domain
+      |
+      [0-9\.]+ # ipv4
+      |
+      \[[a-f0-9\:]+\] # ipv6
+    )
+    (?:
+      :(\d+) # port (5)
+    )?
+    (.*) # path (6)
+  $
+]])
+local http_regex, http_regex_flags = compile_regex('^https?$')
+
+local function match(str, regex, flags)
+  local res = new_tab(regex.ncaptures, regex.name_count)
+  if not str then return false, res end
+
+  local rc = C.ngx_http_lua_ffi_exec_regex(regex, flags, str, #str, 0)
+
+  return rc > 0, collect_captures(regex, rc, str, flags, res)
+end
+
+local function _match_opaque(scheme, opaque)
+  if match(scheme, http_regex, http_regex_flags) then
+    return nil, 'invalid endpoint'
+  end
+
+  return { scheme, opaque = opaque }
+end
+
+local function _transform_match(m)
+  m[0] = nil
+
+  if m[6] == '' or m[6] == '/' then m[6] = nil end
+
+  return m
+end
 
 function _M.split(url, protocol)
   if not url then
@@ -45,27 +109,13 @@ function _M.split(url, protocol)
     return nil, 'invalid protocol'
   end
 
-  local m = re_match(url, abs_pattern, 'oj')
+  local ok, m = match(url, abs_regex, abs_regex_flags)
 
-  if not m then
-    if re_match(scheme, http_pattern, 'oj') then
-      return nil, 'invalid endpoint'
-    end
-
-    return { scheme, opaque = opaque }
+  if ok then
+    return _transform_match(m)
+  else
+    return _match_opaque(scheme, opaque)
   end
-
-  local userinfo, host, port, path = m.userinfo, m.host, m.port, m.path
-  local user, pass
-
-  if path == '/' then path = nil end
-
-  if userinfo then
-    local m2 = re_match(tostring(userinfo), "^([^:\\s]+)?(?::(.*))?$", 'oj') or {}
-    user, pass = m2[1], m2[2]
-  end
-
-  return { scheme, user or false, pass or false, host, port or false, path or nil }
 end
 
 function _M.parse(url, protocol)
