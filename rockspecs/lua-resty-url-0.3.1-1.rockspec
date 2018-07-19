@@ -1,9 +1,9 @@
 package = "lua-resty-url"
-version = "0.3.0-1"
+version = "0.3.1-1"
 source = {
-   url = "https://github.com/3scale/lua-resty-url/archive/v0.3.0.tar.gz",
-   md5 = "c30cb6f26b4b651c17a691200150df77",
-   dir = "lua-resty-url-0.3.0",
+   url = "https://github.com/3scale/lua-resty-url/archive/v0.3.1.tar.gz",
+   md5 = "a4d6352f809738021d96aef77daf8429",
+   dir = "lua-resty-url-0.3.1",
 }
 description = {
    summary = "lua-resty-url - URL parser",
