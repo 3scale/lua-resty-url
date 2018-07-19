@@ -37,6 +37,16 @@ describe('resty.url', function()
         split('https://user:password@example.com'))
     end)
 
+    it('works with dots and dashes in host', function()
+      assert.same({'https', false, false, 'some-test.example.com', false, '/path' },
+              split('https://some-test.example.com/path'))
+    end)
+
+    it('works with numbers in host', function()
+      assert.same({'https', false, false, '3scale.net', false },
+              split('https://3scale.net'))
+    end)
+
     it('works with port and path', function()
       assert.same({'http', false, false, 'example.com', '8080', '/path'},
         split('http://example.com:8080/path'))

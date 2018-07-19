@@ -57,9 +57,9 @@ local abs_regex, abs_regex_flags = compile_regex([[
       )?
     @)?
     ( # host (4)
-      [a-z\.-]+ # domain
+      [a-z\.\-\d]+ # domain
       |
-      [0-9\.]+ # ipv4
+      [\d\.]+ # ipv4
       |
       \[[a-f0-9\:]+\] # ipv6
     )
