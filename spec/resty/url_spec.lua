@@ -42,6 +42,11 @@ describe('resty.url', function()
               split('https://some-test.example.com/path'))
     end)
 
+    it('works with underscores in host', function()
+      assert.same({'http', false, false, 'http_client_backend', '1984' },
+              split('http://http_client_backend:1984'))
+    end)
+
     it('works with numbers in host', function()
       assert.same({'https', false, false, '3scale.net', false },
               split('https://3scale.net'))
