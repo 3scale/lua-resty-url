@@ -10,7 +10,7 @@ local sub = string.sub
 local assert = assert
 
 local _M = {
-  _VERSION = '0.3.1',
+  _VERSION = '0.3.2',
 
   ports = {
     https = 443,
