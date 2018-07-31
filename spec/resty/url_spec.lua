@@ -37,6 +37,11 @@ describe('resty.url', function()
         split('https://user:password@example.com'))
     end)
 
+    it('works with just password', function()
+      assert.same({'redis', false, 'password', 'example.com', false },
+              split('redis://:password@example.com'))
+    end)
+
     it('works with dots and dashes in host', function()
       assert.same({'https', false, false, 'some-test.example.com', false, '/path' },
               split('https://some-test.example.com/path'))

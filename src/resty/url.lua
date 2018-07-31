@@ -50,7 +50,7 @@ local abs_regex, abs_regex_flags = compile_regex([[
     (?:(\w+):)? # scheme (1)
     //
     (?:
-      ([^:@]+) # user (2)
+      ([^:@]+)? # user (2)
       (?:
         :
         ([^@]+)? # password (3)
