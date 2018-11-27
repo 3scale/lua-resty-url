@@ -45,7 +45,7 @@ local function compile_regex(pattern)
 end
 
 local collect_captures = core_regex.collect_captures
-local abs_regex, abs_regex_flags = compile_regex([[
+local abs_regex, abs_regex_flags = compile_regex([=[
   ^
     (?:(\w+):)? # scheme (1)
     //
@@ -68,7 +68,7 @@ local abs_regex, abs_regex_flags = compile_regex([[
     )?
     (.*) # path (6)
   $
-]])
+]=])
 local http_regex, http_regex_flags = compile_regex('^https?$')
 
 local function match(str, regex, flags)
@@ -138,7 +138,7 @@ function _M.parse(url, protocol)
 end
 
 function _M.normalize(uri)
-  local regex = [[
+  local regex = [=[
 (                     # Capture group
 
   (?<!/)/             # Look for / that does not follow another /
@@ -157,7 +157,7 @@ function _M.normalize(uri)
   )
 )
 /+                   # everything else with / after it
-]]
+]=]
   return re_gsub(uri, regex, '/', 'jox')
 end
 
