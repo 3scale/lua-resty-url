@@ -10,7 +10,7 @@ local sub = string.sub
 local assert = assert
 
 local _M = {
-  _VERSION = '0.3.3',
+  _VERSION = '0.3.4',
 
   ports = {
     https = 443,
@@ -37,7 +37,7 @@ local new_tab = core_base.new_tab
 local C = require('ffi').C
 
 local function compile_regex(pattern)
-  local compiled, err, flags = core_regex.re_match_compile(pattern, 'jox')
+  local compiled, err, flags = core_regex.re_match_compile(pattern, 'joxi')
 
   assert(compiled, err)
 

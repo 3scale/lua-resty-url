@@ -57,6 +57,11 @@ describe('resty.url', function()
               split('https://3scale.net'))
     end)
 
+    it('works uppercase in host', function()
+      assert.same({'https', false, false, '3SCALE.net', false },
+          split('https://3SCALE.net'))
+    end)
+
     it('works with port and path', function()
       assert.same({'http', false, false, 'example.com', '8080', '/path'},
         split('http://example.com:8080/path'))
