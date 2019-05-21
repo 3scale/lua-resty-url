@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## Unreleased
 
 ### Fixed
+
+## [0.3.5] - 2019-05-21
+
+### Fixed
 * Parsing URLs with uppercase characters
 
 ## [0.3.4] - 2018-11-27
