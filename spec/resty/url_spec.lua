@@ -141,6 +141,29 @@ describe('resty.url', function()
       local uri = 'data:' .. opaque
       assert.same({ scheme = 'data', opaque = opaque }, parse(uri))
     end)
+
+    it('captures query', function()
+      local query = 'a=1&b=2'
+      local uri = 'http://example.com/some/path?' .. query
+      assert.same({ scheme = 'http', host = 'example.com', path = '/some/path', query = query},
+        parse(uri))
+    end)
+
+    it('captures query without path', function()
+      local query = 'a=1&b=2'
+      local uri = 'http://example.com?' .. query
+      assert.same({ scheme = 'http', host = 'example.com', query = query},
+        parse(uri))
+    end)
+
+    -- I'm not sure why we want no path for / !?
+    it('captures query with / path', function()
+      local query = 'a=1&b=2'
+      local uri = 'http://example.com/?' .. query
+      assert.same({ scheme = 'http', host = 'example.com', query = query},
+        parse(uri))
+    end)
+
   end)
 
   describe('.join', function()
