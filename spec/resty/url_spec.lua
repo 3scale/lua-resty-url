@@ -23,7 +23,7 @@ describe('resty.url', function()
     local split = url.split
 
     it('works with port', function()
-      assert.same({'https', false, false, 'example.com', '8443'},
+      assert.same({'https', false, false, 'example.com', '8443' },
         split('https://example.com:8443'))
     end)
 
@@ -63,7 +63,7 @@ describe('resty.url', function()
     end)
 
     it('works with port and path', function()
-      assert.same({'http', false, false, 'example.com', '8080', '/path'},
+      assert.same({'http', false, false, 'example.com', '8080', '/path' },
         split('http://example.com:8080/path'))
     end)
 
@@ -78,12 +78,12 @@ describe('resty.url', function()
     end)
 
     it('works with IPv4 host', function()
-      assert.same({'https', false, false, '195.47.235.3', '443', '/path'},
+      assert.same({'https', false, false, '195.47.235.3', '443', '/path' },
         split('https://195.47.235.3:443/path'))
     end)
 
     it('works with IPv6 host', function()
-      assert.same({'https', false, false, '[2a02:38::1001]', '443', '/path'},
+      assert.same({'https', false, false, '[2a02:38::1001]', '443', '/path' },
         split('https://[2a02:38::1001]:443/path'))
     end)
   end)
@@ -141,6 +141,14 @@ describe('resty.url', function()
       local uri = 'data:' .. opaque
       assert.same({ scheme = 'data', opaque = opaque }, parse(uri))
     end)
+
+    it('works with @ in path', function()
+      local path = '/6d22649112c442388502ce8a31484b4f_1800w_1200h.jpg@2o_50sh_1pr_1l_150w_90h_1c_1e_90q_1wh'
+      local uri = 'http://example.com' .. path
+      assert.same({ scheme = 'http', host = 'example.com', path = path},
+        parse(uri))
+    end)
+
   end)
 
   describe('.join', function()
